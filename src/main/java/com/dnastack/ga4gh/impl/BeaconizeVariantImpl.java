@@ -1,6 +1,11 @@
 package com.dnastack.ga4gh.impl;
 
 import com.dnastack.ga4gh.api.GABeacon;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,10 +13,6 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
 
 /**
  * A class which implements a beacon from an implementation of GA4GH Variant API.
@@ -53,7 +54,6 @@ public class BeaconizeVariantImpl implements GABeacon {
     }
 
     /**
-     *
      * @return The name of this API implementation.
      */
     public String getName() {
@@ -66,9 +66,7 @@ public class BeaconizeVariantImpl implements GABeacon {
      * @param reference The reference (or chromosome)
      * @param position  Position on the reference
      * @param alt       The alternate allele to match against (currently not supported by GASearchVariantsRequest)
-     *
      * @return A JSON Object containing a GASearchVariantsResponse
-     *
      * @throws IOException    Problems contacting API
      * @throws ParseException Problems parsing response
      */
@@ -104,7 +102,7 @@ public class BeaconizeVariantImpl implements GABeacon {
         StringBuilder sb = new StringBuilder();
 
         Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        for (int c; (c = in.read()) >= 0;) {
+        for (int c; (c = in.read()) >= 0; ) {
             sb.append((char) c);
         }
 
@@ -119,9 +117,7 @@ public class BeaconizeVariantImpl implements GABeacon {
      *
      * @param obj The JSON reponse
      * @param alt The alt to look for
-     *
      * @return Whether or not any variant contains the alt as an alternate base
-     *
      * @throws ParseException Problems parsing the JSON
      */
     private boolean parseResponseForMatchWithAlt(JSONObject obj, String alt) throws ParseException {

@@ -1,8 +1,19 @@
-FROM jboss/wildfly:latest
+FROM jboss/wildfly:8.2.1.Final
+MAINTAINER Miro Cupak <mirocupak@gmail.com>
 
-RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
+# prepare wildfly
+ENV JBOSS_HOME /opt/jboss/wildfly
 
-ADD data /opt/jboss/wildfly/customization/
+USER root
 
-CMD ["/opt/jboss/wildfly/customization/execute.sh"]
+# install necessary packages
+RUN yes | yum update
+RUN yes | yum install patch wget tree curl zip unzip
 
+# customize wildfly
+USER jboss
+RUN $JBOSS_HOME/bin/add-user.sh admin admin --silent
+ADD *.war $JBOSS_HOME/standalone/deployments/beaconizer.war
+
+# expose ports
+EXPOSE 8080

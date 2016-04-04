@@ -6,35 +6,24 @@ package com.dnastack.ga4gh.controller;
 import com.dnastack.ga4gh.dto.BeaconResponseDTO;
 import com.dnastack.ga4gh.dto.BeaconResponseListDTO;
 import com.dnastack.ga4gh.impl.BeaconizeVariantImpl;
-import java.util.ArrayList;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 
 /**
- *
  * @author jim
  */
 @Path("/")
 public class BeaconizeVariantController {
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "AIzaSyB-RQ8ZfJZO1anOfbyZEaIBYRKvEpXm4iw";
 
-    private static final BeaconizeVariantImpl[] GABeacons = new BeaconizeVariantImpl[]{
-        new BeaconizeVariantImpl("platinum", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"3049512673186936334"}),
-        new BeaconizeVariantImpl("thousandgenomes", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"4252737135923902652"}),
-        new BeaconizeVariantImpl("thousandgenomes-phase3", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"10473108253681171589"}),
-        new BeaconizeVariantImpl("curoverse", "http://lightning-dev4.curoverse.com/api", null, new String[]{"hu"}),
-        new BeaconizeVariantImpl("curoverse-ref", "http://lightning-dev4.curoverse.com/apiref", null, new String[]{"1000g_2013"})
-    };
+    private static final BeaconizeVariantImpl[] GABeacons = new BeaconizeVariantImpl[]{new BeaconizeVariantImpl("platinum", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"3049512673186936334"}), new BeaconizeVariantImpl("thousandgenomes", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"4252737135923902652"}), new BeaconizeVariantImpl("thousandgenomes-phase3", "https://www.googleapis.com/genomics/v1beta2", API_KEY, new String[]{"10473108253681171589"}), new BeaconizeVariantImpl("curoverse", "http://lightning-dev4.curoverse.com/api", null, new String[]{"hu"}), new BeaconizeVariantImpl("curoverse-ref", "http://lightning-dev4.curoverse.com/apiref", null, new String[]{"1000g_2013"})};
 
     /**
-     *
      * Returns whether the variant exists in the Variant API Implementation with
      * name 'requestedName'. If no beacon with the name 'name' exists, returns 404 not
      * found.
@@ -45,9 +34,8 @@ public class BeaconizeVariantController {
      * @param chromosome       - The chromosome of the variant to query
      * @param coordinate       - The coordinate of the variant to query.
      * @param allele           - The allele of the variant to query.
-     *
      * @return 404 not found if the requestedName is not found, otherwise a BeaconResponseDTO that records whether or
-     *         not the variant exists.
+     * not the variant exists.
      */
     @GET
     @Path("{name}")
@@ -63,10 +51,7 @@ public class BeaconizeVariantController {
                 }
             }
         }
-        return Response
-                .status(Response.Status.NOT_FOUND)
-                .entity("No Variant API Implementation with the name " + requestedName + " exists in this registry.")
-                .build();
+        return Response.status(Response.Status.NOT_FOUND).entity("No Variant API Implementation with the name " + requestedName + " exists in this registry.").build();
     }
 
     /**
@@ -78,9 +63,8 @@ public class BeaconizeVariantController {
      * @param chromosome       - The chromosome of the variant to query
      * @param coordinate       - The coordinate of the variant to query.
      * @param allele           - The allele of the variant to query.
-     *
      * @return A list of all beacon responses, one for each Variant API implementation registered in the GABeacons
-     *         field.
+     * field.
      */
     @GET
     @Produces({"application/xml", "application/json"})

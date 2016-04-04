@@ -2,41 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dnastack</groupId>
-    <artifactId>BeaconizeVariant</artifactId>
+    <artifactId>beaconizer</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>BeaconizeVariant</name>
-
-    <organization>
-        <name>DNAstack</name>
-        <url>http://dnastack.com</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <id>mfiume</id>
-            <name>Marc Fiume</name>
-            <email>marc@dnastack.com</email>
-            <url>https://github.com/mfiume</url>
-            <organization>DNAstack</organization>
-            <organizationUrl>http://dnastack.com</organizationUrl>
-            <roles>
-                <role>Developer, CEO</role>
-            </roles>
-        </developer>
-        
-        <developer>
-            <id>jim</id>
-            <name>Jim Vlasblom</name>
-            <email>jim@dnastack.com</email>
-            <url>https://github.com/jvlasblom</url>
-            <organization>DNAstack</organization>
-            <organizationUrl>http://dnastack.com</organizationUrl>
-            <roles>
-                <role>Developer, CTO</role>
-            </roles>
-        </developer>  
-    </developers>
+    <name>beaconizer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,20 +40,20 @@
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
             <type>jar</type>
         </dependency>
-        
+
     </dependencies>
     <build>
         <plugins>
@@ -104,8 +73,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${version.compiler.plugin}</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

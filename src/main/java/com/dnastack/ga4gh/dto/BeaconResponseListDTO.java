@@ -5,15 +5,14 @@
  */
 package com.dnastack.ga4gh.dto;
 
-import java.util.List;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
- *
  * @author jim
  */
-@XmlRootElement(name="BEACONResponses")
+@XmlRootElement(name = "BEACONResponses")
 public class BeaconResponseListDTO {
     private List<BeaconResponseDTO> beaconResponses;
 
@@ -25,6 +24,6 @@ public class BeaconResponseListDTO {
     public void setBeaconResponses(List<BeaconResponseDTO> beaconResponses) {
         this.beaconResponses = beaconResponses;
     }
-    
-    
+
+
 }

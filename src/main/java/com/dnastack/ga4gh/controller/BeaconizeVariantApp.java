@@ -5,14 +5,13 @@
  */
 package com.dnastack.ga4gh.controller;
 
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 
 /**
- *
  * @author jim
  */
 @ApplicationPath("/beacon")
@@ -22,5 +21,5 @@ public class BeaconizeVariantApp extends Application {
     public Set<Class<?>> getClasses() {
         return new HashSet<Class<?>>(Arrays.asList(BeaconizeVariantController.class));
     }
-    
+
 }
