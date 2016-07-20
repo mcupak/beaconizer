@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Patrick Magee (patrickmageee@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,6 @@ import javax.ws.rs.ext.Provider;
  *
  * @author patmagee
  */
-
 @Provider
 public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 Patrick Magee (patrickmageee@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by patrickmagee on 2016-06-16.
+ * @author patmagee
  */
 public class ResponseMappingResource {
 

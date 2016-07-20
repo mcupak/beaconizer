@@ -1,3 +1,26 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2014 Patrick Magee (patrickmageee@gmail.com).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.dnastack.beacon.beaconizer.dao.impl;
 
 import com.dnastack.beacon.beaconizer.dao.api.BeaconizerDao;
@@ -20,7 +43,10 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 /**
- * Created by patrickmagee on 2016-07-20.
+ * BeaconizerDao implementation. Default implementation which loads into memory a list of beacons defined
+ * in a json configuration file.
+ *
+ * @author patmagee
  */
 @Singleton
 public class BeaconizerDaoImpl implements BeaconizerDao {
@@ -28,6 +54,9 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
     private static final String CONFIG_FILE = "beacons.json";
     Map<String, BeaconRequester> beacons;
 
+    /**
+     * Initialize the Beacons and load them into memopry from file
+     */
     @PostConstruct
     public void init() {
 
@@ -53,6 +82,9 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BeaconRequester find(String name) throws BeaconNotFoundException {
         BeaconRequester beacon = beacons.get(name);
@@ -62,6 +94,9 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
         return beacon;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BeaconRequester> list() {
         List<BeaconRequester> beaconList = new ArrayList<>();
@@ -74,6 +109,12 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
     }
 
 
+    /**
+     * Parse the resource file containing the beacon definition and convert it to a json string
+     * @return JSON string
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     private String resourceParser() throws URISyntaxException, IOException {
         ClassLoader cl = getClass().getClassLoader();
 
@@ -90,17 +131,26 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
         return jsonString;
     }
 
-
-    private java.util.List<BeaconDTO> parseBeacons(String json) {
+    /**
+     * Given a json string, parse the input and convert it to BeaconDTO objects
+     * @param json json string from resourceParser
+     * @return List of BeaconDTO's
+     */
+    private List<BeaconDTO> parseBeacons(String json) {
         Gson gson = new GsonBuilder().create();
-        Type type = new TypeToken<java.util.List<BeaconDTO>>() {
+        Type type = new TypeToken<List<BeaconDTO>>() {
         }.getType();
 
-        java.util.List<BeaconDTO> beaconDTOs = gson.fromJson(json, type);
+        List<BeaconDTO> beaconDTOs = gson.fromJson(json, type);
 
         return beaconDTOs;
     }
 
+    /**
+     * Validate the data from the beacon
+     * @param beaconDTO beaconDTO
+     * @throws BeaconException
+     */
     private void validateBeacon(BeaconDTO beaconDTO) throws BeaconException {
         if (beaconDTO.getName() == null) {
             throw new BeaconException("BeaconDTO name is missing");

@@ -3,10 +3,5 @@
     "name":"test",
     "description":"Test Beacon",
     "url":"localhost:8080/beacon-java/"
-  },
-  {
-    "name":"test2",
-    "description":"Test Beacon",
-    "url":"localhost:8080/beacon-java/"
   }
 ]

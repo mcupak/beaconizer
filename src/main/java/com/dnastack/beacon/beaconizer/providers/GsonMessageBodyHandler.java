@@ -1,8 +1,7 @@
-
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 Patrick Magee (patrickmageee@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +42,6 @@ import java.lang.reflect.Type;
  * Gson Message Body Handler for serializing JSON data to and from auto generated Java classes
  *
  * @author patmagee
- * @version 1.0
  */
 @Provider
 @Produces(MediaType.APPLICATION_JSON)

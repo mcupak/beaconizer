@@ -1,3 +1,26 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2014 Patrick Magee (patrickmageee@gmail.com).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.dnastack.beacon.beaconizer.service.impl;
 
 import com.dnastack.beacon.beaconizer.dao.api.BeaconizerDao;
@@ -15,7 +38,9 @@ import java.util.List;
 
 
 /**
- * Created by patrickmagee on 2016-07-19.
+ * BeaconService Implementation
+ *
+ * @author patmagee
  */
 @Singleton
 public class BeaconizerServiceImpl implements BeaconizerService {
@@ -23,6 +48,9 @@ public class BeaconizerServiceImpl implements BeaconizerService {
     @Inject
     BeaconizerDao dao;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Beacon> getBeacons() throws BeaconException {
         List<Beacon> beaconList = new ArrayList<>();
@@ -33,14 +61,18 @@ public class BeaconizerServiceImpl implements BeaconizerService {
         return beaconList;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Beacon getBeacon(String name) throws BeaconException {
         return dao.find(name).getBeacon();
 
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BeaconAlleleResponse> getAllBeaconAlleleResponses(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
         List<BeaconAlleleResponse> beaconResponseList = new ArrayList<>();
@@ -55,6 +87,9 @@ public class BeaconizerServiceImpl implements BeaconizerService {
         return beaconResponseList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BeaconAlleleResponse> getAllBeaconAlleleResponse(BeaconAlleleRequest request) throws BeaconException {
         List<BeaconAlleleResponse> beaconResponseList = new ArrayList<>();
@@ -66,6 +101,9 @@ public class BeaconizerServiceImpl implements BeaconizerService {
         return beaconResponseList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BeaconAlleleResponse getBeaconAlleleResponse(String name, String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
         validateRequest(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds);
@@ -73,6 +111,9 @@ public class BeaconizerServiceImpl implements BeaconizerService {
                   .getBeaconResponse(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BeaconAlleleResponse getBeaconAlleleResponse(String name, BeaconAlleleRequest request) throws BeaconException {
         validateRequest(request.getReferenceName(), request.getStart(), request.getReferenceBases(), request.getAlternateBases(), request
@@ -104,7 +145,7 @@ public class BeaconizerServiceImpl implements BeaconizerService {
             throw new BeaconException("AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
         } else if (!assemblyId.startsWith("GRCh")) {
             throw new BeaconException("Invalid assemblyId. Assemblies must be from GRCh builds");
-        } else if (datasetIds == null || datasetIds.size() == 0 ) {
+        } else if (datasetIds == null || datasetIds.size() == 0) {
             throw new BeaconException("Missing DatasetId. At least 1 dataset id must be provided");
         }
     }
