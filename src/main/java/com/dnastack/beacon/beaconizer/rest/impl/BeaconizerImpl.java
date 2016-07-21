@@ -23,13 +23,15 @@
  */
 package com.dnastack.beacon.beaconizer.rest.impl;
 
-import com.dnastack.beacon.beaconizer.exceptions.BeaconException;
 import com.dnastack.beacon.beaconizer.exceptions.BeaconNotFoundException;
 import com.dnastack.beacon.beaconizer.rest.api.Beaconizer;
 import com.dnastack.beacon.beaconizer.service.api.BeaconizerService;
+import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.ga4gh.beacon.BeaconAlleleRequest;
+import org.ga4gh.beacon.BeaconAlleleResponse;
 import org.ga4gh.beacon.BeaconError;
 
 import javax.inject.Inject;
@@ -39,6 +41,7 @@ import java.util.List;
 
 /**
  * Beaconizer REST-API implementation
+ *
  * @author patmagee
  */
 @Path("/")
@@ -49,43 +52,16 @@ public class BeaconizerImpl implements Beaconizer {
 
     private Gson gson = new GsonBuilder().create();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Response listBeacons() {
+
+    public Response getBeacons() {
         try {
             return Response.ok(beaconizerService.getBeacons()).build();
+
         } catch (BeaconException e) {
-            return formBeaconError(e);
+            return formBeaconError(null, e);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Response searchAllBeacons(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) {
-        try {
-            return Response
-                    .ok(beaconizerService.getAllBeaconAlleleResponses(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses))
-                    .build();
-        } catch (BeaconException e) {
-            return formBeaconError(e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Response searchAllBeacons(BeaconAlleleRequest request) {
-        try {
-            return Response.ok(beaconizerService.getAllBeaconAlleleResponse(request)).build();
-        } catch (BeaconException e) {
-            return formBeaconError(e);
-        }
-    }
 
     /**
      * {@inheritDoc}
@@ -95,7 +71,7 @@ public class BeaconizerImpl implements Beaconizer {
         try {
             return Response.ok(beaconizerService.getBeacon(name)).build();
         } catch (BeaconException e) {
-            return formBeaconError(e);
+            return formBeaconError(name, e);
         }
     }
 
@@ -109,7 +85,7 @@ public class BeaconizerImpl implements Beaconizer {
                     .ok(beaconizerService.getBeaconAlleleResponse(name, referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses))
                     .build();
         } catch (BeaconException e) {
-            return formBeaconError(e);
+            return formBeaconError(name, e);
         }
     }
 
@@ -121,32 +97,54 @@ public class BeaconizerImpl implements Beaconizer {
         try {
             return Response.ok(beaconizerService.getBeaconAlleleResponse(name, request)).build();
         } catch (BeaconException e) {
-            return formBeaconError(e);
+            return formBeaconError(name, e);
         }
     }
 
     /**
      * Given a passed BeaconException, form a new beaconError object and return it wrapped in a response object
-     * @param e BeaconException
+     *
+     * @param exception BeaconException
      * @return Response object
      */
-    private Response formBeaconError(BeaconException e) {
+    private Response formBeaconError(String name, BeaconException exception) {
+        BeaconError error = new BeaconError();
+        error.setMessage(exception.getMessage());
 
-        String message = e.getMessage();
-        try {
-            BeaconError error = gson.fromJson(message, BeaconError.class);
-            return Response.status(error.getErrorCode()).entity(error).build();
-        } catch (Exception ex) {
+        System.out.println(error.getMessage());
 
-            BeaconError error = new BeaconError();
-            error.setMessage(e.getMessage());
+        if (exception instanceof BeaconNotFoundException) {
+            error.setErrorCode(Response.Status.NOT_FOUND.getStatusCode());
+        } else {
 
-            if (e instanceof BeaconNotFoundException) {
-                error.setErrorCode(404);
-            } else {
-                error.setErrorCode(500);
+            switch (exception.getReason()) {
+                case INVALID_REQUEST:
+                    error.setErrorCode(Response.Status.BAD_REQUEST.getStatusCode());
+                    break;
+                default:
+                    error.setErrorCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            }
+        }
+
+        //If this is an alleleRequest then return a BeaconAlleleResponse with the error fields set appropriately
+        if (exception.getClass().getCanonicalName().equals(BeaconAlleleRequestException.class.getCanonicalName())) {
+            BeaconAlleleRequestException e = (BeaconAlleleRequestException) exception;
+            BeaconAlleleResponse response = new BeaconAlleleResponse();
+            response.setExists(null);
+            response.setError(error);
+
+            if (e.getRequest() != null) {
+                response.setAlleleRequest(e.getRequest());
             }
 
+            if (name != null) {
+                response.setBeaconId(name);
+            }
+
+            return Response.status(error.getErrorCode()).entity(response).build();
+
+        } else {
+            BeaconError response = error;
             return Response.status(error.getErrorCode()).entity(error).build();
         }
     }

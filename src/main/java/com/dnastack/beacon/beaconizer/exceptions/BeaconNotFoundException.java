@@ -23,16 +23,15 @@
  */
 package com.dnastack.beacon.beaconizer.exceptions;
 
+import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.utils.Reason;
+
 /**
  * @author patmagee
  */
 public class BeaconNotFoundException extends BeaconException {
 
-    public BeaconNotFoundException() {
-
-    }
-
     public BeaconNotFoundException(String msg) {
-        super(msg);
+        super(Reason.ERROR,msg);
     }
 }

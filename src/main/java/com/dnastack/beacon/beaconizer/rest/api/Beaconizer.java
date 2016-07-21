@@ -37,50 +37,11 @@ import java.util.List;
  */
 public interface Beaconizer {
 
-    /**
-     * Return a list of Beacon objects for each beacon that is supported by the current beaconizer. The Beacon objects
-     * are returned by each individual beacon and collated into a single collection which is added to the response
-     * object.
-     *
-     * @return Response object
-     */
+
     @GET
     @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response listBeacons();
-
-
-    /**
-     * Query all of the supported beacons for the existence of a specific variant. Query each beacon individually then
-     * collate all responses into a single list.
-     *
-     * @param referenceName name of the reference
-     * @param start start position
-     * @param referenceBases reference bases
-     * @param alternateBases alternate bases
-     * @param assemblyId genome assembly
-     * @param datasetIds list of datasetIds
-     * @param includeDatasetResponses include
-     * @return Response object
-     */
-    @GET
-    @Path("query")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response searchAllBeacons(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses);
-
-
-    /**
-     * Query all of the supported beacons for the existence of a specific variant. Query each beacon individually then
-     * collate all responses into a single list.
-     *
-     * @param request BeaconAlleleRequest object
-     * @return Response object
-     */
-    @POST
-    @Path("query")
-    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON})
-    Response searchAllBeacons(BeaconAlleleRequest request);
+    Response getBeacons();
 
     /**
      * Get information from a specific beacon given the name it was registered under.
@@ -96,13 +57,13 @@ public interface Beaconizer {
     /**
      * Query a single Beacon for the existence of a variant
      *
-     * @param name name of beacon
-     * @param referenceName name of the reference
-     * @param start start position
-     * @param referenceBases reference bases
-     * @param alternateBases alternate bases
-     * @param assemblyId genome assembly
-     * @param datasetIds list of datasetIds
+     * @param name                    name of beacon
+     * @param referenceName           name of the reference
+     * @param start                   start position
+     * @param referenceBases          reference bases
+     * @param alternateBases          alternate bases
+     * @param assemblyId              genome assembly
+     * @param datasetIds              list of datasetIds
      * @param includeDatasetResponses include
      * @return Response Object
      */
@@ -114,13 +75,13 @@ public interface Beaconizer {
     /**
      * Query a single Beacon for the existence of a variant
      *
-     * @param name name of beacon
+     * @param name    name of beacon
      * @param request request object
      * @return Response object
      */
     @POST
     @Path("{name}/query")
-    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON})
     Response getBeaconResponse(@PathParam("name") String name, BeaconAlleleRequest request);
 

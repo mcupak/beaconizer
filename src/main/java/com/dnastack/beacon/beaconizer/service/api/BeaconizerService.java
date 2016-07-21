@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.beaconizer.service.api;
 
-import com.dnastack.beacon.beaconizer.exceptions.BeaconException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
@@ -38,10 +38,8 @@ import java.util.List;
 public interface BeaconizerService {
 
     /**
-     * Return a list of Beacon objects for each beacon that is supported by the current beaconizer. The Beacon objects
-     * are returned by each individual beacon and collated into a single list
-     *
-     * @return list of Beacon objects
+     * Get a list of all the beacons
+     * @return
      * @throws BeaconException
      */
     List<Beacon> getBeacons() throws BeaconException;
@@ -54,30 +52,6 @@ public interface BeaconizerService {
      */
     Beacon getBeacon(String name) throws BeaconException;
 
-
-    /**
-     * Query all of the supported beacons for the existence of a specific variant. Query each beacon individually then
-     * collate all responses into a single list.
-     *
-     * @param request BeaconAlleleRequest object
-     * @return Response object
-     */
-    List<BeaconAlleleResponse> getAllBeaconAlleleResponse(BeaconAlleleRequest request) throws BeaconException;
-
-    /**
-     * Query all of the supported beacons for the existence of a specific variant. Query each beacon individually then
-     * collate all responses into a single list.
-     *
-     * @param referenceName           name of the reference
-     * @param start                   start position
-     * @param referenceBases          reference bases
-     * @param alternateBases          alternate bases
-     * @param assemblyId              genome assembly
-     * @param datasetIds              list of datasetIds
-     * @param includeDatasetResponses include
-     * @return List of BeconAlleleResponses
-     */
-    List<BeaconAlleleResponse> getAllBeaconAlleleResponses(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException;
 
     /**
      * Query a single Beacon for the existence of a variant

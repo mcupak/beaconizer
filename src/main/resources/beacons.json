@@ -1,7 +1,7 @@
 [
   {
-    "name":"test",
-    "description":"Test Beacon",
-    "url":"localhost:8080/beacon-java/"
+    "name": "beacon_id",
+    "adapterClass": "com.dnastack.beacon.core.adapter.impl.SampleBeaconAdapterImpl",
+    "configValues": []
   }
 ]

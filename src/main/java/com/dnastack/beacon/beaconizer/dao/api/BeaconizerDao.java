@@ -24,7 +24,7 @@
 package com.dnastack.beacon.beaconizer.dao.api;
 
 import com.dnastack.beacon.beaconizer.exceptions.BeaconNotFoundException;
-import com.dnastack.beacon.beaconizer.util.BeaconRequester;
+import com.dnastack.beacon.utils.AdapterConfig;
 
 import java.util.List;
 
@@ -42,13 +42,13 @@ public interface BeaconizerDao {
      * @return BeaconRequest object
      * @throws BeaconNotFoundException
      */
-    BeaconRequester find(String name) throws BeaconNotFoundException;
+    AdapterConfig find(String name) throws BeaconNotFoundException;
+
 
     /**
-     * Return a list of all the current Beacons that the beaconizer supports
-     * @return List of BeaconRequest objects
+     * List all the currently registered beacons
+     * @return list of beacon names
      */
-    List<BeaconRequester> list();
-
+    List<String> listRegisteredBeacons();
 
 }

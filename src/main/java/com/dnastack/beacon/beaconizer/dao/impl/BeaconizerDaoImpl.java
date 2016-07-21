@@ -24,12 +24,12 @@
 package com.dnastack.beacon.beaconizer.dao.impl;
 
 import com.dnastack.beacon.beaconizer.dao.api.BeaconizerDao;
-import com.dnastack.beacon.beaconizer.dao.dto.BeaconDTO;
-import com.dnastack.beacon.beaconizer.exceptions.BeaconException;
 import com.dnastack.beacon.beaconizer.exceptions.BeaconNotFoundException;
-import com.dnastack.beacon.beaconizer.util.BeaconRequester;
+import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.utils.AdapterConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import javax.annotation.PostConstruct;
@@ -52,7 +52,7 @@ import java.util.*;
 public class BeaconizerDaoImpl implements BeaconizerDao {
 
     private static final String CONFIG_FILE = "beacons.json";
-    Map<String, BeaconRequester> beacons;
+    Map<String, AdapterConfig> beacons;
 
     /**
      * Initialize the Beacons and load them into memopry from file
@@ -62,18 +62,16 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
 
         try {
             String jsonString = resourceParser();
-            java.util.List<BeaconDTO> listBeaconDTOs = parseBeacons(jsonString);
+            List<AdapterConfig> adapters = parseBeacons(jsonString);
 
-            if (listBeaconDTOs.size() < 1) {
+            if (adapters.size() < 1) {
                 throw new BeaconException("No beacons defined in beacon.json");
             }
 
             beacons = new HashMap<>();
 
-            for (BeaconDTO beaconDTO : listBeaconDTOs) {
-                validateBeacon(beaconDTO);
-
-                beacons.put(beaconDTO.getName(), new BeaconRequester(beaconDTO));
+            for (AdapterConfig adapter : adapters) {
+                beacons.put(adapter.getName(), adapter);
             }
         } catch (Exception e) {
             RuntimeException re = new RuntimeException(e.getMessage());
@@ -86,31 +84,22 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
      * {@inheritDoc}
      */
     @Override
-    public BeaconRequester find(String name) throws BeaconNotFoundException {
-        BeaconRequester beacon = beacons.get(name);
+    public AdapterConfig find(String name) throws BeaconNotFoundException {
+        AdapterConfig beacon = beacons.get(name);
         if (beacon == null) {
             throw new BeaconNotFoundException("Could not find beacon with name: " + name);
         }
         return beacon;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<BeaconRequester> list() {
-        List<BeaconRequester> beaconList = new ArrayList<>();
+    public List<String> listRegisteredBeacons() {
         Set<String> keys = beacons.keySet();
-        for (String key : keys) {
-            beaconList.add(beacons.get(key));
-        }
-
-        return beaconList;
+        return new ArrayList<>(keys);
     }
-
 
     /**
      * Parse the resource file containing the beacon definition and convert it to a json string
+     *
      * @return JSON string
      * @throws URISyntaxException
      * @throws IOException
@@ -133,30 +122,18 @@ public class BeaconizerDaoImpl implements BeaconizerDao {
 
     /**
      * Given a json string, parse the input and convert it to BeaconDTO objects
+     *
      * @param json json string from resourceParser
      * @return List of BeaconDTO's
      */
-    private List<BeaconDTO> parseBeacons(String json) {
+    private List<AdapterConfig> parseBeacons(String json) {
+        JsonParser parser = new JsonParser();
         Gson gson = new GsonBuilder().create();
-        Type type = new TypeToken<List<BeaconDTO>>() {
+        Type type = new TypeToken<List<AdapterConfig>>() {
         }.getType();
 
-        List<BeaconDTO> beaconDTOs = gson.fromJson(json, type);
+        List<AdapterConfig> adapters = gson.fromJson(json, type);
 
-        return beaconDTOs;
-    }
-
-    /**
-     * Validate the data from the beacon
-     * @param beaconDTO beaconDTO
-     * @throws BeaconException
-     */
-    private void validateBeacon(BeaconDTO beaconDTO) throws BeaconException {
-        if (beaconDTO.getName() == null) {
-            throw new BeaconException("BeaconDTO name is missing");
-        }
-        if (beaconDTO.getUrl() == null) {
-            throw new BeaconException("BeaconDTO Url is missing");
-        }
+        return adapters;
     }
 }
