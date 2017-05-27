@@ -3,5 +3,17 @@
         "name": "beacon_id",
         "adapterClass": "com.dnastack.beacon.core.adapter.impl.SampleBeaconAdapterImpl",
         "configValues": []
+    },
+
+    {
+        "name": "beacon-adapter-variants",
+        "adapterClass": "com.dnastack.beacon.adater.variants.VariantsBeaconAdapter",
+        "configValues": []
+    },
+
+    {
+        "name": "beacon-adapter-annotations",
+        "adapterClass": "com.dnastack.beacon.adater.annotations.AnnotationsBeaconAdapter",
+        "configValues": []
     }
 ]

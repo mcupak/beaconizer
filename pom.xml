@@ -134,17 +134,16 @@
             <scope>test</scope>
             <type>pom</type>
         </dependency>
-
-
-        <!--Your Beacon Adapters here-->
-
-        <!--This is a sample beacon adapter, please remove before use-->
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>sample-beacon-adapter</artifactId>
+            <artifactId>beacon-adapter-variants</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!--Your Beacon Adapters here-->
+        <dependency>
+            <groupId>com.dnastack</groupId>
+            <artifactId>beacon-adapter-annotations</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
